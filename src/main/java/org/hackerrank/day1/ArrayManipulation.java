@@ -15,7 +15,7 @@ public class ArrayManipulation {
         int[][] query=new int[q_size][3];
         for(int i=0;i<q_size;i++){
             for(int j=0;j<3;j++){
-               query[i][j]=sc.nextInt();
+                query[i][j]=sc.nextInt();
             }
         }
 
