@@ -12,15 +12,15 @@ public class MaxMinWindow {
         }
         int[] res=new int[n];
         for (int k = 1; k <= n; k++) {
-            int maxOfMin = Integer.MIN_VALUE;
+            int max = Integer.MIN_VALUE;
             for (int i = 0; i <= n - k; i++) {
                 int min = Integer.MAX_VALUE;
                 for (int j = i; j < i + k; j++) {
                     min = Math.min(min, arr[j]);
                 }
-                maxOfMin = Math.max(maxOfMin, min);
+                max = Math.max(max, min);
             }
-            res[k - 1] = maxOfMin;
+            res[k - 1] = max;
         }
         for(int i=0;i<n;i++){
             System.out.println(res[i]);
