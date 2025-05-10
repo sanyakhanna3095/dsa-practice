@@ -1,93 +1,46 @@
 package org.hackerrank.day4;
 
-import java.util.Scanner;
+import java.util.*;
 
 public class MergeSortedLists {
-
-    static class SinglyLinkedListNode {
-        int data;
-        SinglyLinkedListNode next;
-
-        SinglyLinkedListNode(int data) {
-            this.data = data;
-            this.next = null;
-        }
-    }
-
-    static class SinglyLinkedList {
-        SinglyLinkedListNode head;
-        SinglyLinkedListNode tail;
-
-        void insertNode(int data) {
-            SinglyLinkedListNode node = new SinglyLinkedListNode(data);
-            if (head == null) {
-                head = node;
-            } else {
-                tail.next = node;
-            }
-            tail = node;
-        }
-    }
-
-    static SinglyLinkedListNode mergeLists(SinglyLinkedListNode head1, SinglyLinkedListNode head2) {
-        if (head1 == null) return head2;
-        if (head2 == null) return head1;
-
-        SinglyLinkedListNode head;
-
-        if (head1.data <= head2.data) {
-            head = head1;
-            head1 = head1.next;
-        } else {
-            head = head2;
-            head2 = head2.next;
-        }
-
-        SinglyLinkedListNode current = head;
-
-        while (head1 != null && head2 != null) {
-            if (head1.data <= head2.data) {
-                current.next = head1;
-                head1 = head1.next;
-            } else {
-                current.next = head2;
-                head2 = head2.next;
-            }
-            current = current.next;
-        }
-
-        if (head1 != null) current.next = head1;
-        else current.next = head2;
-
-        return head;
-    }
-
-    static void printList(SinglyLinkedListNode head) {
-        while (head != null) {
-            System.out.print(head.data + " ");
-            head = head.next;
-        }
-        System.out.println();
-    }
-
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        Scanner sc = new Scanner(System.in);
+        int n1 = sc.nextInt();
+        LinkedList<Integer> list1 = new LinkedList<>();
+        for (int i = 0; i < n1; i++) {
+            list1.add(sc.nextInt());
+        }
 
+        int n2 = sc.nextInt();
+        LinkedList<Integer> list2 = new LinkedList<>();
+        for (int i = 0; i < n2; i++) {
+            list2.add(sc.nextInt());
+        }
 
-            SinglyLinkedList list1 = new SinglyLinkedList();
-            int n1 = scanner.nextInt();
-            for (int i = 0; i < n1; i++) {
-                list1.insertNode(scanner.nextInt());
+        LinkedList<Integer> merged = new LinkedList<>();
+        int i = 0, j = 0;
+        while (i < list1.size() && j < list2.size()) {
+            if (list1.get(i) <= list2.get(j)) {
+                merged.add(list1.get(i++));
             }
-
-            SinglyLinkedList list2 = new SinglyLinkedList();
-            int n2 = scanner.nextInt();
-            for (int i = 0; i < n2; i++) {
-                list2.insertNode(scanner.nextInt());
+            else {
+                merged.add(list2.get(j++));
             }
+        }
 
-            SinglyLinkedListNode mergedHead = mergeLists(list1.head, list2.head);
-            printList(mergedHead);
+        // Add remaining elements
+        while (i < list1.size()) {
+            merged.add(list1.get(i++));
+        }
+        while (j < list2.size()) {
+            merged.add(list2.get(j++));
+        }
+
+        // Output
+        System.out.println("Merged Sorted List:");
+        for (int num : merged) {
+            System.out.print(num + " ");
+        }
 
     }
 }
