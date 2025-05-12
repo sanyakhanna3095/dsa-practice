@@ -1,75 +1,74 @@
 package org.hackerrank.day6;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
-public class TaskManager {
-    private static class Task implements Comparable<Task>{
-        int id;
-        int taskId;
-        int priority;
+class Task{
+    int id;
+    int taskId;
+    int priority;
 
-        public Task(int id, int taskId, int priority){
-            this.id=id;
-            this.taskId=taskId;
-            this.priority=priority;
-        }
-
-        @Override
-        public int compareTo(Task o) {
-            if(this.priority!=o.priority){
-                return Integer.compare(o.priority, this.priority);
-            }
-            return Integer.compare(o.taskId, this.taskId);
-        }
+    public Task(int id, int taskId, int priority){
+        this.id=id;
+        this.taskId=taskId;
+        this.priority=priority;
     }
-    private final TreeMap<Task, Integer> sortedTasks;
+}
+public class TaskManager {
+    private final PriorityQueue<Task> maxHeap;
     private final Map<Integer, Task> taskMap;
 
     public TaskManager(List<List<Integer>> tasks) {
-        sortedTasks = new TreeMap<>();
+        maxHeap = new PriorityQueue<>((a,b)-> {
+            if(a.priority!=b.priority){
+                return Integer.compare(b.priority, a.priority);
+            }
+            else {
+                return Integer.compare(b.taskId, a.taskId);
+            }
+        });
         taskMap = new HashMap<>();
         for (List<Integer> task : tasks) {
             int id = task.get(0);
             int taskId = task.get(1);
             int priority = task.get(2);
-            add(id, taskId, priority);
+            Task t1=new Task(id, taskId, priority);
+            taskMap.put(taskId, t1);
+            maxHeap.offer(t1);
         }
     }
 
     public void add(int userId, int taskId, int priority) {
         Task task=new Task(userId, taskId, priority);
-        sortedTasks.put(task, userId);
         taskMap.put(taskId, task);
+        maxHeap.offer(task);
     }
 
     public void edit(int taskId, int newPriority) {
-        Task task=taskMap.get(taskId);
-        if (task != null) {
-            sortedTasks.remove(task);
-            task.priority = newPriority;
-            sortedTasks.put(task, task.id);
+        if(!taskMap.containsKey(taskId)){
+            return;
         }
+        Task oldTask=taskMap.get(taskId);
+        Task newTask=new Task(oldTask.id, taskId, newPriority);
+        taskMap.put(taskId, newTask);
+        maxHeap.offer(newTask);
+
     }
 
     public void rmv(int taskId) {
-        Task task=taskMap.get(taskId);
-        if(task!=null){
-            sortedTasks.remove(task);
-            taskMap.remove(taskId);
-        }
+        taskMap.remove(taskId);
     }
 
     public int execTop() {
-        if(sortedTasks.isEmpty()){
-            return -1;
+        while (!maxHeap.isEmpty()) {
+            Task top = maxHeap.poll();
+            Task current = taskMap.get(top.taskId);
+            // Make sure the polled task is the current valid one
+            if (current != null && current == top) {
+                taskMap.remove(top.taskId);
+                return top.id;
+            }
         }
-        Task task=sortedTasks.firstKey();
-        sortedTasks.remove(task);
-        taskMap.remove(task.taskId);
-        return task.id;
+        return -1;
     }
 
 }
