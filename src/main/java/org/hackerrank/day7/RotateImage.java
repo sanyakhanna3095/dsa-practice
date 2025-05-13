@@ -52,7 +52,7 @@ public class RotateImage {
             }
         }
 
-//        swap rows
+//        swap row elements
         for (int i = 0; i < arr.length; i++) {
             for (int j = 0; j < arr.length / 2; j++) {
                 int t = arr[i][j];
