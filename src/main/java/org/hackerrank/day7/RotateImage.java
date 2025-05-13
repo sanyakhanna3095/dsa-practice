@@ -15,6 +15,7 @@ public class RotateImage {
         }
 
 //        bruteforce
+        /*
         ArrayList<ArrayList<Integer>> list=new ArrayList<>();
         for(int i=n-1; i>=0;i--){
             ArrayList<Integer> l=new ArrayList<>();
@@ -31,6 +32,34 @@ public class RotateImage {
             }
         }
 
+        for (int i=0;i<n;i++){
+            for(int j=0;j<n;j++){
+                System.out.print(arr[i][j]+" ");
+            }
+            System.out.println();
+        }
+        */
+
+
+//        optimal - transpose and reverse
+
+//        transpose
+        for(int i=0;i<n;i++){
+            for(int j=i;j<n;j++){
+                int t=arr[i][j];
+                arr[i][j]=arr[j][i];
+                arr[j][i]=t;
+            }
+        }
+
+//        swap rows
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr.length / 2; j++) {
+                int t = arr[i][j];
+                arr[i][j] = arr[i][arr.length - 1 - j];
+                arr[i][arr.length - 1 - j] = t;
+            }
+        }
         for (int i=0;i<n;i++){
             for(int j=0;j<n;j++){
                 System.out.print(arr[i][j]+" ");
